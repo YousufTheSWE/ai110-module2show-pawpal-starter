@@ -5,7 +5,11 @@
 **a. Initial design**
 
 - Briefly describe your initial UML design.
+  - It will be based on a Owner, Pet, and Task model, where owner carries out a task on a pet.
 - What classes did you include, and what responsibilities did you assign to each?
+  - We will have Owner, which has basic information like name and pets underneath. Owner can execute task.
+  - There will be Pet, which has the name of the pet.
+  - Tasks will include the name of task (walk or give medicine), and the pet that needs the task done.
 
 **b. Design changes**
 
