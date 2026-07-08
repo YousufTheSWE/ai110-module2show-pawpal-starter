@@ -19,6 +19,7 @@ class Pet:
         breed: str | None = None,
         birthday: datetime | None = None,
     ) -> None:
+        """Create a pet with a name, species, and optional breed and birthday."""
         self.name = name
         self.species = species      # e.g. "dog", "cat"
         self.breed = breed          # e.g. "Labrador"; None if unknown
@@ -29,6 +30,7 @@ class Task:
     """A care task (e.g. walk, give medicine) for a specific pet."""
 
     def __init__(self, name: str, pet: Pet, time: datetime, priority: int) -> None:
+        """Create a task for a pet at a given time with a priority (1-10)."""
         self.name = name          # what to do, e.g. "walk" or "give medicine"
         self.pet = pet            # the pet this task concerns
         self.time = time          # when the task is scheduled
@@ -40,6 +42,7 @@ class Owner:
     """A pet owner who keeps pets and carries out tasks."""
 
     def __init__(self, name: str, pets: list[Pet] | None = None) -> None:
+        """Create an owner with a name and an optional list of pets."""
         self.name = name
         self.pets: list[Pet] = pets if pets is not None else []
 
@@ -52,6 +55,7 @@ class Scheduler:
     """Organizes tasks: what's due now, what's upcoming, and by priority."""
 
     def __init__(self, tasks: list[Task] | None = None) -> None:
+        """Create a scheduler with an optional initial list of tasks."""
         self.tasks: list[Task] = tasks if tasks is not None else []
 
     def add_task(self, task: Task) -> None:
