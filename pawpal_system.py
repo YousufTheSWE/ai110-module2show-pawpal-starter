@@ -46,6 +46,10 @@ class Owner:
         self.name = name
         self.pets: list[Pet] = pets if pets is not None else []
 
+    def add_pet(self, pet: Pet) -> None:
+        """Add a pet to this owner's list of pets."""
+        self.pets.append(pet)
+
     def execute_task(self, task: Task) -> None:
         """Carry out the given task."""
         raise NotImplementedError
@@ -80,4 +84,4 @@ class Scheduler:
 
     def sort_by_priority(self) -> list[Task]:
         """Return tasks sorted by priority (highest first)."""
-        raise NotImplementedError
+        return sorted(self.tasks, key=lambda task: task.priority, reverse=True)
