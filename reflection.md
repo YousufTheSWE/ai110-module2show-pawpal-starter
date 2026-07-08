@@ -14,8 +14,11 @@
 **b. Design changes**
 
 - Did your design change during implementation?
+  - Yes.
 - If yes, describe at least one change and why you made it.
-
+  - We created a Scheduler class in order to get tasks that need to be done now, and tasks that need to be done in the future.
+  - An attribute was created to mark task as complete or incomplete, which can be done through Scheduler.
+  
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
