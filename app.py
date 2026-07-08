@@ -87,31 +87,92 @@ else:
         task_title = st.text_input("Task title", value="Morning walk")
         task_time = st.time_input("Time")
         priority = st.slider("Priority (1 = low, 10 = high)", 1, 10, 5)
+        # Recurring tasks: "one-off" maps to None so the task never repeats.
+        frequency_label = st.selectbox("Repeat", ["one-off", "daily", "weekly"])
         if st.form_submit_button("Add task") and task_title:
             when = datetime.combine(date.today(), task_time)
-            scheduler.add_task(Task(name=task_title, pet=pet, time=when, priority=priority))
+            frequency = None if frequency_label == "one-off" else frequency_label
+            scheduler.add_task(
+                Task(name=task_title, pet=pet, time=when, priority=priority, frequency=frequency)
+            )
             st.success(f"Scheduled '{task_title}' for {pet.name}.")
+
+# Conflict detection: surface warnings instead of failing silently.
+for warning in scheduler.detect_conflicts():
+    st.warning(warning)
+
+st.divider()
+
+st.subheader("Manage Tasks")
+st.caption("Tick the box to mark a task done. Completing a recurring task schedules its next occurrence.")
 
 if not scheduler.tasks:
     st.info("No tasks yet. Add one above.")
+else:
+    # Filtering controls (Scheduler.filter_by_pet / filter_by_status).
+    fcol1, fcol2 = st.columns(2)
+    with fcol1:
+        pet_filter = st.selectbox(
+            "Filter by pet", ["All pets"] + [p.name for p in owner.pets]
+        )
+    with fcol2:
+        status_filter = st.selectbox("Filter by status", ["All", "Pending", "Done"])
+
+    # Sorting choice (Scheduler.sort_by_time / sort_by_priority).
+    sort_choice = st.radio("Sort by", ["Time", "Priority"], horizontal=True)
+    visible = (
+        scheduler.sort_by_time() if sort_choice == "Time" else scheduler.sort_by_priority()
+    )
+
+    # Apply filters on top of the chosen ordering. Each filter method returns a
+    # matching subset; we intersect by object identity to preserve the sort.
+    if pet_filter != "All pets":
+        keep = set(map(id, scheduler.filter_by_pet(pet_filter)))
+        visible = [t for t in visible if id(t) in keep]
+    if status_filter != "All":
+        keep = set(map(id, scheduler.filter_by_status(status_filter == "Done")))
+        visible = [t for t in visible if id(t) in keep]
+
+    if not visible:
+        st.info("No tasks match the current filters.")
+    for task in visible:
+        freq = f" · {task.frequency}" if task.frequency else ""
+        label = f"{task.time:%H:%M} — {task.name} ({task.pet.name}) · P{task.priority}{freq}"
+        # id(task) is a stable key for the object's lifetime, so the checkbox
+        # tracks the right task even as the list is re-sorted or re-filtered.
+        checked = st.checkbox(label, value=task.complete, key=f"task_{id(task)}")
+        if checked and not task.complete:
+            next_task = scheduler.mark_complete(task)
+            if next_task is not None:
+                st.toast(f"Next '{next_task.name}' scheduled for {next_task.time:%b %d}")
+            st.rerun()
+        elif not checked and task.complete:
+            scheduler.mark_incomplete(task)
+            st.rerun()
 
 st.divider()
 
 st.subheader("Today's Schedule")
-st.caption("Sorted by priority (highest first) via Scheduler.sort_by_priority().")
 
-if st.button("Generate schedule"):
-    if not scheduler.tasks:
-        st.warning("No tasks to schedule yet.")
-    else:
-        rows = [
-            {
-                "Priority": task.priority,
-                "Time": task.time.strftime("%H:%M"),
-                "Task": task.name,
-                "Pet": task.pet.name,
-                "Status": "done" if task.complete else "pending",
-            }
-            for task in scheduler.sort_by_priority()
-        ]
-        st.table(rows)
+if not scheduler.tasks:
+    st.info("Add some tasks to see the schedule.")
+else:
+    # Due now vs. upcoming (Scheduler.get_current_tasks / get_upcoming_tasks).
+    due_now = scheduler.get_current_tasks()
+    upcoming = scheduler.get_upcoming_tasks()
+    scol1, scol2 = st.columns(2)
+    scol1.metric("Due now", len(due_now))
+    scol2.metric("Upcoming", len(upcoming))
+
+    rows = [
+        {
+            "Time": task.time.strftime("%H:%M"),
+            "Priority": task.priority,
+            "Task": task.name,
+            "Pet": task.pet.name,
+            "Repeat": task.frequency or "—",
+            "Status": "done" if task.complete else "pending",
+        }
+        for task in scheduler.sort_by_time()
+    ]
+    st.table(rows)

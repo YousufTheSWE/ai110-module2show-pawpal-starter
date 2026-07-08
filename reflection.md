@@ -26,12 +26,16 @@
 **a. Constraints and priorities**
 
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
+  - It considers priority and time.
 - How did you decide which constraints mattered most?
+  - Mostly on priority, since its a direct matter of how much a task matters.
 
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
+  - detect_conflicts() returns a list of strings and the UI renders them as warnings — the app never refuses to add a conflicting task.
 - Why is that tradeoff reasonable for this scenario?
+  - It's reasonable because the owner may be able to perform two tasks at the same time (for example, feeding two pets at once from the same bowl).
 
 ---
 
