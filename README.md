@@ -58,17 +58,27 @@ Today's Schedule for Sam
 
 ```bash
 # Run the full test suite:
-pytest
-
-# Run with coverage:
-pytest --cov
+py -m pytest
 ```
+
+Tests cover sorting and conflicts and some other methods.
 
 Sample test output:
 
 ```
-# Paste your pytest output here
+==================================== test session starts ====================================
+platform win32 -- Python 3.14.0, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\yousu\Codepath\ai110-module2show-pawpal-starter
+plugins: anyio-4.14.1
+collected 5 items                                                                            
+
+tests\test_pawpal.py .....                                                             [100%]
+
+===================================== 5 passed in 0.02s =====================================
 ```
+
+Based on the output, I would give a 5 star confidence rating.
+
 
 ## 📐 Smarter Scheduling
 
@@ -76,10 +86,13 @@ Sample test output:
 
 | Feature | Method(s) | Notes |
 |---------|-----------|-------|
-| Task sorting | | e.g., by priority, duration |
-| Filtering | | e.g., skip tasks if time runs out |
-| Conflict handling | | e.g., overlapping time slots |
-| Recurring tasks | | e.g., daily vs. weekly |
+Sort by time	Scheduler.sort_by_time()	Earliest task first
+Sort by priority	Scheduler.sort_by_priority()	Highest priority first
+Filter by status	Scheduler.filter_by_status()	Done vs. pending
+Filter by pet	Scheduler.filter_by_pet()	Tasks for one pet
+Conflict detection	Scheduler.detect_conflicts()	Warns on same-time tasks; never crashes
+Recurring task	Task.next_occurrence()	Builds next copy (+day/+week) via timedelta
+Complete + recur	Scheduler.mark_complete()	Marks done, auto-adds next occurrence
 
 ## 📸 Demo Walkthrough
 
