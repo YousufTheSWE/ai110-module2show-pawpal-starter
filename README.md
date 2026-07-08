@@ -98,10 +98,9 @@ Complete + recur	Scheduler.mark_complete()	Marks done, auto-adds next occurrence
 
 Describe your app in numbered steps so a reader can follow along without watching a video:
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. Put in pet name/species and add Pet. Do this for all pets first.
+2. Put in tasks after specifying pet, make sure to watch out for any conflict notifications.
+3. Check the schedule and see what is next and needs to done.
+4. When a task is done, check it off in the current tasks area.
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->

@@ -44,12 +44,16 @@
 **a. How you used AI**
 
 - How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
+  - I used it for design, brainstorming, debugging, and refactoring for almost all files.
 - What kinds of prompts or questions were most helpful?
+  - Prompts with specific instructions and those that say "give a simple response". 
 
 **b. Judgment and verification**
 
 - Describe one moment where you did not accept an AI suggestion as-is.
+  - Ai suggested making the schedule only show today's task.
 - How did you evaluate or verify what the AI suggested?
+  - I did not like the suggestion as owner's may be curious about what they needed to do tomorrow. So I enforced a design where the schedule showed all tasks.
 
 ---
 
@@ -58,12 +62,16 @@
 **a. What you tested**
 
 - What behaviors did you test?
+  - Conflict detection and correct sorting.
 - Why were these tests important?
+  - To ensure that owners know which task to do first, and if they need to do tasks simultaneosly.
 
 **b. Confidence**
 
 - How confident are you that your scheduler works correctly?
+  - Very confident.
 - What edge cases would you test next if you had more time?
+  - Conflict Resolution of different owners at certain times.
 
 ---
 
@@ -72,11 +80,14 @@
 **a. What went well**
 
 - What part of this project are you most satisfied with?
+  - How helpful the AI was.
 
 **b. What you would improve**
 
 - If you had another iteration, what would you improve or redesign?
+  - I'd double check the UI myself and maybe add some features related to tasks.
 
 **c. Key takeaway**
 
 - What is one important thing you learned about designing systems or working with AI on this project?
+  - It's important to have a very solid design before attempting to code a system.

@@ -97,9 +97,14 @@ else:
             )
             st.success(f"Scheduled '{task_title}' for {pet.name}.")
 
-# Conflict detection: surface warnings instead of failing silently.
-for warning in scheduler.detect_conflicts():
-    st.warning(warning)
+# Conflict detection: surface warnings prominently instead of failing silently.
+# A time clash is actionable for the owner, so lead with a count and list each
+# clashing pair as its own warning line.
+conflicts = scheduler.detect_conflicts()
+if conflicts:
+    st.warning(f"⚠️ {len(conflicts)} scheduling conflict(s) — two tasks share a time slot:")
+    for warning in conflicts:
+        st.markdown(f"- {warning}")
 
 st.divider()
 
@@ -152,7 +157,8 @@ else:
 
 st.divider()
 
-st.subheader("Today's Schedule")
+st.subheader("All Scheduled Tasks")
+st.caption("Every task across all days, earliest first. Recurring tasks add future-dated occurrences.")
 
 if not scheduler.tasks:
     st.info("Add some tasks to see the schedule.")
@@ -166,6 +172,7 @@ else:
 
     rows = [
         {
+            "Date": task.time.strftime("%a %b %d"),
             "Time": task.time.strftime("%H:%M"),
             "Priority": task.priority,
             "Task": task.name,
